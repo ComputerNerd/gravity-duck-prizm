@@ -195,8 +195,8 @@ static void engine_move_objects(Level* level)
 {
 	static int time=0;
 	int i, j, n, min_distance, distance;
-	char pestle_hitbox[] = {31, 27, 22, 18, 14, 10};
-	char homing_bullet[28][2] = {{5, 0}, {5, 1}, {5, 2}, {4, 3}, {3, 4}, {2, 5}, {1, 5}, {0, 5}, {-1, 5}, {-2, 5}, {-3, 4}, {-4, 3}, {-5, 2}, {-5, 1}, {-5, 0}, {-5, -1}, {-5, -2}, {-4, -3}, {-3, -4}, {-2, -5}, {-1, -5}, {0, -5}, {1, -5}, {2, -5}, {3, -4}, {4, -3}, {5, -2}, {5, -1}};
+	const char pestle_hitbox[] = {31, 27, 22, 18, 14, 10};
+	const char homing_bullet[28][2] = {{5, 0}, {5, 1}, {5, 2}, {4, 3}, {3, 4}, {2, 5}, {1, 5}, {0, 5}, {-1, 5}, {-2, 5}, {-3, 4}, {-4, 3}, {-5, 2}, {-5, 1}, {-5, 0}, {-5, -1}, {-5, -2}, {-4, -3}, {-3, -4}, {-2, -5}, {-1, -5}, {0, -5}, {1, -5}, {2, -5}, {3, -4}, {4, -3}, {5, -2}, {5, -1}};
 	Object* object, *new, *duck = object_get(level->object, DUCK);
 	if(time_getTicks() - time > 2) { // 4
 		time = time_getTicks();

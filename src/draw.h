@@ -16,8 +16,8 @@ typedef struct {
 
 int draw_init();
 void draw_quit();
-void draw_tileMap(Level* level, Camera camera);
-void draw_objects(Level* level, Camera camera);
+void draw_tileMap(const Level* level, Camera camera);
+void draw_objects(const Level* level, Camera camera);
 void draw_background();
 void draw_tipsPanel();
 
