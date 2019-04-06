@@ -1,29 +1,29 @@
-# Edit linker script here...
-# linker= ../../toolchain/prizm.x
-linker	= ../../common/prizm.ld
-
-CFLAGS	= -mb -mhitachi -Wall -Wextra -I ../../include -O3
-LDFLAGS	= $(CFLAGS) -T $(linker) -nostartfiles -lgcc  -Wl,-static,-gc-sections\
-	  -L ../../lib
-
-SRC	= $(wildcard src/*.[cs])
-OBJ	= $(SRC:%=%.o)
-
-NAME	= GravityDuck
-BIN	= $(NAME).bin
-ADDIN	= $(NAME).g3a
-
+CC=sh3eb-elf-gcc
+OBJCOPY=sh3eb-elf-objcopy
+MKG3A=mkg3a
+RM=rm
+CFLAGS=-m4a-nofpu -mb -flto -O2 -mhitachi -Wall -I../../include -lgcc -L../../lib -fuse-linker-plugin -Wall -Wextra
+LDFLAGS=$(CFLAGS) -nostartfiles -T../../toolchain/prizm.x -Wl,-static -Wl,-gc-sections
+OBJECTS=src/bitmaps.o src/draw.o src/engine.o src/graphic_functions.o src/intro.o src/key.o src/level.o src/main.o \
+src/menu.o src/object.o src/rand.o src/save.o src/text.o src/tileset.o src/overclock.o
+PROJ_NAME=GravityDuck
+BIN=$(PROJ_NAME).bin
+ELF=$(PROJ_NAME).elf
+ADDIN=$(PROJ_NAME).g3a
+ 
 all: $(ADDIN)
-
-$(BIN):	$(OBJ)
-	sh3eb-elf-gcc $^ $(LDFLAGS) -o $@
+ 
 $(ADDIN): $(BIN)
-	mkg3a -n :$(NAME) -i uns:unselected.bmp -i sel:selected.bmp $< $@
-
-%.c.o: %.c
-	sh3eb-elf-gcc -c $(CFLAGS) $< -o $@
-%.s.o: %.s
-	sh3eb-elf-as -c $< -o $@
-
+	$(MKG3A) -n :"Gravity Duck" -i uns:unselected.bmp -i sel:selected.bmp $< $@
+$(ELF): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+$(BIN): $(ELF)
+	$(OBJCOPY) -O binary $(PROJ_NAME).elf $(BIN)
+.s.o:
+	$(CC) -c $(CFLAGS) $< -o $@
+ 
+.c.o:
+	$(CC) -c $(CFLAGS) $< -o $@
+ 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJECTS) $(PROJ_NAME).bin $(PROJ_NAME).elf $(ADDIN)
