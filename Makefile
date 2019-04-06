@@ -5,7 +5,7 @@ RM=rm
 CFLAGS=-m4a-nofpu -mb -flto -O2 -mhitachi -Wall -I../../include -lgcc -L../../lib -fuse-linker-plugin -Wall -Wextra
 LDFLAGS=$(CFLAGS) -nostartfiles -T../../toolchain/prizm.x -Wl,-static -Wl,-gc-sections
 OBJECTS=src/bitmaps.o src/draw.o src/engine.o src/graphic_functions.o src/intro.o src/key.o src/level.o src/main.o \
-src/menu.o src/object.o src/rand.o src/save.o src/text.o src/tileset.o src/overclock.o
+src/menu.o src/object.o src/rand.o src/save.o src/text.o src/tileset.o
 PROJ_NAME=GravityDuck
 BIN=$(PROJ_NAME).bin
 ELF=$(PROJ_NAME).elf
