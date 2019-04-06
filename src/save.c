@@ -3,7 +3,7 @@
 #include "save.h"
 
 /* global variables */
-unsigned short filename[] = {'\\','\\','f','l','s','0','\\','G','r','a','v','i','t','y','D','.','s','a','v',0};
+static const unsigned short filename[] = {'\\','\\','f','l','s','0','\\','G','r','a','v','i','t','y','D','.','s','a','v',0};
 
 /* publis functions */
 int save_read()

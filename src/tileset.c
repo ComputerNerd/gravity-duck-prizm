@@ -13,11 +13,6 @@ static void tileset_horizontal_symmetry(Tileset* tileset);
 static void tileset_vertical_symmetry(Tileset* tileset);
 static void tileset_rotation_90_degrees(Tileset* tileset);
 
-void do_nothing_with(short color)
-{
-	((short*)GetVRAMAddress())[0] = 0xffff;
-}
-
 #include "bitmaps.h"
 
 /* public functions */
