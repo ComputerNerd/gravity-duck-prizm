@@ -1,6 +1,6 @@
 #ifndef _TIME
 #define _TIME
-
-int time_getTicks();
+#include <fxcg/rtc.h>
+#define time_getTicks RTC_GetTicks
 
 #endif //_TIME
