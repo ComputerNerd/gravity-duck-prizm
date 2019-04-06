@@ -14,11 +14,11 @@ typedef struct {
 	int x, y;
 } Camera;
 
-int draw_init();
-void draw_quit();
+int draw_init(void);
+void draw_quit(void);
 void draw_tileMap(const Level* level, Camera camera);
 void draw_objects(const Level* level, Camera camera);
-void draw_background();
-void draw_tipsPanel();
+void draw_background(void);
+void draw_tipsPanel(void);
 
 #endif //DRAW

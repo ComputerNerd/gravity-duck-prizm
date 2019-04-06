@@ -1,4 +1,5 @@
 #include <fxcg/display.h>
+#include <fxcg/keyboard.h>
 #include "graphic_functions.h"
 
 #include "draw.h"

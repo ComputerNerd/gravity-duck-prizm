@@ -5,8 +5,8 @@
 /* global variables */
 static const unsigned short filename[] = {'\\','\\','f','l','s','0','\\','G','r','a','v','i','t','y','D','.','s','a','v',0};
 
-/* publis functions */
-int save_read()
+/* public functions */
+int save_read(void)
 {
 	int file, ret=1;
 	file = Bfile_OpenFile_OS(filename, 1, 0); // _OPENMODE_READ = 1

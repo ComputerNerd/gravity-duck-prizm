@@ -26,7 +26,7 @@ extern const char bmp_duck_intro[];
 extern const short palette_duck_intro[];
 
 extern const char bmp_congratulations[];
-extern const short palette_congratulations[];
+extern short palette_congratulations[];
 
 extern const char bmp_game_complete[];
 extern const short palette_game_complete[];

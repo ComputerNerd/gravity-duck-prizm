@@ -8,6 +8,7 @@
 #include "text.h"
 #include "tileset.h"
 #include "time.h"
+#include "bitmaps.h"
 
 #define NB_CONFETTI 30
 #define sgn(x) (x<0?-1:x>0?1:0)
@@ -45,7 +46,8 @@ static void intro_main(int end)
 		"\"AH, GOOD, I SEE YOU HAVE\nRETURNED WITH THE EGGS!\"",
 		"\"HERE. THIS IS YOUR REWARD.\"",
 		"\"NOW BEGONE! I HAVE AN OMELET\nTO MAKE!\""
-	}, *tips[] = {
+	};
+	const char *tips[] = {
 		"PRESS EXIT TO SKIP",
 		"(PRESS SHIFT)"
 	};
@@ -116,7 +118,7 @@ static void intro_congratulations()
 			confetti[i].color = rand()%7;
 		}
 		while(!key_down(K_EXE) && !key_down(K_EXIT)) {
-			if(intro_timer(0, 122)) congratulations->palette[0] = palette[(color=(color+1)%4)]; // "CONGRATULATIONS" changes color ~every second
+			if(intro_timer(0, 122)) palette_congratulations[0] = palette[(color=(color+1)%4)]; // "CONGRATULATIONS" changes color ~every second
 			if(intro_timer(1, 1)) {
 				for(i=0 ; i<NB_CONFETTI ; i++) {
 					confetti[i].ay += confetti[i].dy;
@@ -167,7 +169,8 @@ static int intro_timer(int id, int delay)
 static void intro_background(int end)
 {
 	int x, y;
-	const short color_intro[] = {4129,6241,8386,12547,14660,18853,23014}, color_end[] = {11449,11515,11614,15807,22015,28223,32351};
+	const short color_intro[] = {4129,6241,8386,12547,14660,18853,23014};
+       	const short color_end[] = {11449,11515,11614,15807,22015,28223,32351};
 	const short *color;
 	short *vram = GetVRAMAddress() + 64;
 	color = end ? color_end : color_intro;

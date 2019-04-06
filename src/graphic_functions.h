@@ -6,7 +6,7 @@
 
 void *GetVRAMAddress(void);
 void FillVRAM(short color);
-void Fade();
+void Fade(void);
 void FillScreen(unsigned short color);
 void HorizontalLine(int y, int x1, int y2, short color);
 void Rectangle(int x, int y, int w, int h, short color);

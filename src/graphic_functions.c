@@ -1,3 +1,4 @@
+#include <fxcg/display.h>
 #include "draw.h"
 #include "graphic_functions.h"
 
@@ -9,7 +10,7 @@ void FillVRAM(short color)
 		*(VRAM++) = color32bits;
 }
 
-void Fade()
+void Fade(void)
 {
 	int i;
 	short* VRAM = GetVRAMAddress();

@@ -1,3 +1,5 @@
+#include <fxcg/display.h>
+#include <fxcg/keyboard.h>
 #include "graphic_functions.h"
 
 #include "engine.h"
@@ -12,7 +14,8 @@
 
 int main(void)
 {
-	int id_level, unlock, freq;
+	Bdisp_EnableColor(1); // Otherwise GetKey puts the program into 3-bit mode.
+	int id_level, unlock;
 
 	FillVRAM(0x0000);
 
@@ -31,5 +34,11 @@ int main(void)
 		}
 	}
 
-	return 0;
+	PrintXY(2, 2, "  Thank you", TEXT_MODE_NORMAL, TEXT_COLOR_BLACK);
+	PrintXY(2, 3, "  for playing", TEXT_MODE_NORMAL, TEXT_COLOR_BLACK);
+	PrintXY(2, 4, "  Gravity Duck!", TEXT_MODE_NORMAL, TEXT_COLOR_BLACK);
+	for(;;) {
+		int key;
+		GetKey(&key);
+	}
 }

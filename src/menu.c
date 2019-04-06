@@ -1,4 +1,6 @@
 #include <fxcg/display.h>
+#include <fxcg/keyboard.h>
+#include <fxcg/misc.h>
 #include "graphic_functions.h"
 
 #include "draw.h"
@@ -22,9 +24,7 @@
 #define MENU_X ((SCREEN_WIDTH - MENU_WIDTH)/2)
 #define MENU_Y 89
 
-static void menu_background();
-
-char *itoa(int, char *);
+static void menu_background(void);
 
 /* public functions */
 void menu_title()
@@ -44,7 +44,7 @@ void menu_title()
 
 int menu_main(int cursor, int unlock)
 {
-	int i, x, y, time=0, ret=-1, first=1;
+	int i, x, y, time, ret=-1, first=1;
 	char str[3];
 	Tileset *select_level, *bg, *button;
 
@@ -54,8 +54,8 @@ int menu_main(int cursor, int unlock)
 	if(select_level && bg && button) {
 		if(cursor > NB_LEVEL) cursor = NB_LEVEL;
 		if(unlock > NB_LEVEL) unlock = NB_LEVEL;
-		while(key_down(K_EXE));
-		while(key_down(K_EXIT));
+		while(key_down(K_EXE) || key_down(K_EXIT));
+		time = time_getTicks();
 		while(ret<0) {
 			if(time_getTicks() - time > 10) {
 				if(key_down(K_EXIT)) ret = 0;
@@ -78,11 +78,20 @@ int menu_main(int cursor, int unlock)
 				x = MENU_X+(i%NB_ROW)*(ITEM_WIDTH+1);
 				y = MENU_Y+(i/NB_ROW)*(ITEM_HEIGHT+1);
 				CopySpriteMasked(button->tile[ i+first<=unlock? (i+first==cursor? 0 : 1) : 2 ], button->palette, x, y, button->width, button->height, MASK);
-				if(i+first<=unlock) text_print(x+5+(i+first<4)+(i+first<10)+(i+first<20)+((i+first)%10==1)+32, y+8, itoa(i+first, str), 1, MASK);
+				if(i+first<=unlock) {
+					itoa(i+first, str);
+					text_print(x+5+(i+first<4)+(i+first<10)+(i+first<20)+((i+first)%10==1)+32, y+8, str, 1, MASK);
+				}
 			}
 			Bdisp_PutDisp_DD();
 		}
-	} else ret = cursor;
+	} else {
+		PrintXY(2, 2, "  LvlSel Fail", TEXT_MODE_NORMAL, TEXT_COLOR_BLACK);
+		int key_unused;
+		for(;;) {
+			GetKey(&key_unused);
+		}
+	}
 	tileset_free(select_level);
 	tileset_free(bg);
 	tileset_free(button);
@@ -90,7 +99,7 @@ int menu_main(int cursor, int unlock)
 }
 
 /* private functions */
-static void menu_background()
+static void menu_background(void)
 {
 	static int time=0, x[NB_CIRCLE]={42, 72, 223, 265, 358, 396, 506, 587, 606}, y[NB_CIRCLE]={163, 31, 239, 109, 0, 185, 83, 230, 38}, size[NB_CIRCLE]={35, 55, 60, 51, 34, 50, 65, 53, 27};
 	int i;

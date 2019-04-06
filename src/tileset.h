@@ -21,7 +21,8 @@ typedef enum {
 typedef struct {
 	int width, height, length;
 	char** tile;
-	short* palette;
+	int tiles_in_rom;
+	const short* palette;
 } Tileset;
 
 Tileset* tileset_load (Tileset_name name);

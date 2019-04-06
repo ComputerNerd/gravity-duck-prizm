@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <fxcg/keyboard.h>
+
 #include "tileset.h"
 #include "graphic_functions.h"
 
@@ -302,12 +304,36 @@ void tileset_free(Tileset* tileset)
 	int i;
 	if(tileset) {
 		if(tileset->tile) {
-			for(i=0 ; i<tileset->length ; i++)
-				free(tileset->tile[i]);
+			if (!tileset->tiles_in_rom) {
+				for(i=0 ; i<tileset->length ; i++)
+					free(tileset->tile[i]);
+			}
 			free(tileset->tile);
 		}
-		free(tileset->palette);
 		free(tileset);
+	}
+}
+
+static void copy_tileset_if_needed(Tileset* tileset) {
+	if (tileset->tiles_in_rom) {
+		int i;
+		tileset->tiles_in_rom = 0;
+		char * bmp = tileset->tile[0];
+		int tile_size = tileset->width * tileset->height;
+		for(i=0 ; i<tileset->length ; i++) {
+			tileset->tile[i] = malloc(tile_size);
+			if(!tileset->tile[i]) {
+				for( ; i ; i--)
+					free(tileset->tile[i-1]);
+				free(tileset->tile);
+				free(tileset);
+				int key;
+				for(;;)
+					GetKey(&key);
+			}
+			memcpy(tileset->tile[i], bmp, tile_size);
+			bmp += tile_size;
+		}
 	}
 }
 
@@ -315,11 +341,8 @@ void tileset_free(Tileset* tileset)
 static Tileset* tileset_create(const char* bmp, int width, int height, int length, const short* palette, int palette_length)
 {
 	Tileset* tileset;
-	int i, byte_width, tile_size;
+	int i, tile_size;
 	if(!bmp) return NULL;
-	byte_width = width*2;
-/* Don't need to allocate 2 bytes per pixel to stored indexed data (Lephe) */
-//	tile_szie = byte_width * height;
 	tile_size = width * height;
 
 	tileset = malloc(sizeof(Tileset));
@@ -328,36 +351,25 @@ static Tileset* tileset_create(const char* bmp, int width, int height, int lengt
 	tileset->width = width;
 	tileset->height = height;
 	tileset->length = length;
+	tileset->tiles_in_rom = 1;
 	tileset->tile = malloc(sizeof(char*) * length);
 	if(!tileset->tile) {
 		free(tileset);
 		return NULL;
 	}
-
 	for(i=0 ; i<length ; i++) {
-		tileset->tile[i] = malloc(tile_size);
-		if(!tileset->tile[i]) {
-			for( ; i ; i--)
-				free(tileset->tile[i-1]);
-			free(tileset->tile);
-			free(tileset);
-			return NULL;
-		}
-		memcpy(tileset->tile[i], bmp+i*width*height, tile_size);
+		tileset->tile[i] = bmp;
+		bmp += tile_size;
 	}
 
-	tileset->palette = malloc(palette_length*sizeof(short));
-	if(!tileset->palette) {
-		tileset_free(tileset);
-		return NULL;
-	}
-	memcpy(tileset->palette, palette, palette_length*sizeof(short));
+	tileset->palette = palette;
 
 	return tileset;
 }
 
 static void tileset_horizontal_symmetry(Tileset* tileset)
 {
+	copy_tileset_if_needed(tileset);
 	int byte_width, i, x, y;
 	unsigned char* line;
 	if(!tileset) return;
@@ -376,6 +388,7 @@ static void tileset_horizontal_symmetry(Tileset* tileset)
 
 static void tileset_vertical_symmetry(Tileset* tileset)
 {
+	copy_tileset_if_needed(tileset);
 	int byte_width, i, y;
 	unsigned char* line;
 	if(!tileset) return;
@@ -394,6 +407,7 @@ static void tileset_vertical_symmetry(Tileset* tileset)
 
 static void tileset_rotation_90_degrees(Tileset* tileset)
 {
+	copy_tileset_if_needed(tileset);
 	int new_byte_width, new_tile_size, i, x, y;
 	char* tmp_tile;
 	if(!tileset) return;
