@@ -1,19 +1,6 @@
 #include "draw.h"
 #include "graphic_functions.h"
 
-#if 0
-void* GetVRAMAdress()
-{
-    return GetVRAMAddress();
-	/*asm("mov.l syscall_adress, r2\n"
-	    "mov.l getVRAM, r0\n"
-	    "jmp @r2\n"
-	    "nop\n"
-	    "syscall_adress: .long 0x80020070\n"
-	    "getVRAM: .long 0x01E6");*/
-}
-#endif
-
 void FillVRAM(short color)
 {
 	int i, color32bits, *VRAM = GetVRAMAddress();
